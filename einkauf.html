@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Einkaufsliste</title>
+        <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    </head>
+    <body>
+        <h1>Einkaufsliste</h1>
+        <p>
+            <strong>Event</strong>:
+            <span id="event"></span>
+        </p>
+        <ul></ul>
+        <script>
+
+            // Debug to inspector console
+            console.log(DATA)
+
+            // Einkaufsliste
+            'https://mirko.westermeier.de/promises/einkauf.json'
+
+            // Fetch Einkaufsliste
+            $.getJSON(URL, CALLBACK)
+
+            // Set event name z. B.
+            document.querySelector('#event').textContent = TEXT
+
+            // Iterate list z. B.
+            ARRAY.forEach(item => {CODE})
+
+            // Append item to list z. B.
+            const list = document.querySelector('ul')
+            list.insertAdjacentHTML('beforeend', `<li>${TEXT}</li>`)
+
+        </script>
+    </body>
+</html>
