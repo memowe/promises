@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+        <script src="https://cdn.jsdelivr.net/npm/showdown"></script>
+        <style>
+            body {margin: 1; padding: 0; height: 100vh}
+            body {display: flex; flex-flow: column nowrap; justify-content: space-between}
+            body > * {padding: 1em 2em}
+            header, footer {flex: 0 0 auto}
+            main {flex: 1 0 auto}
+            header img {height: 4em; float: right; margin: 0 0 1em 1em}
+            header hr {clear: right}
+        </style>
+    </head>
+    <body>
+        <header></header>
+        <main></main>
+        <footer></footer>
+        <script>
+
+            // Prepare markdown parser and translation
+            const sd = new showdown.Converter()
+            HTML = sd.makeHtml(markdown)
+
+            // Fetch prefix and config file URL
+            const prefix    = 'https://mirko.westermeier.de/promises/'
+            const configURL = prefix + 'page-config.json'
+
+            // Fetch data
+            $.getJSON(URL, CALLBACK)
+
+            // Set title
+            document.title = NAME
+
+            // Mount HTML to page part (header, main, footer)
+            document.querySelector(PART).innerHTML = HTML
+
+        </script>
+    </body>
+</html>
