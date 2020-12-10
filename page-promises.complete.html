@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/showdown"></script>
+        <style>
+            body {margin: 1; padding: 0; height: 100vh}
+            body {display: flex; flex-flow: column nowrap; justify-content: space-between}
+            body > * {padding: 1em 2em}
+            header, footer {flex: 0 0 auto}
+            main {flex: 1 0 auto}
+            header img {height: 4em; float: right; margin: 0 0 1em 1em}
+            header hr {clear: right}
+        </style>
+    </head>
+    <body>
+        <header></header>
+        <main></main>
+        <footer></footer>
+        <script>
+
+            // Prepare markdown parser
+            const sd = new showdown.Converter()
+
+            // Fetch prefix
+            const prefix = 'https://mirko.westermeier.de/promises/'
+
+            // Fetch and parse configuration
+            const loadConfig = fetch(prefix + 'page-config.json').then(res => res.json())
+
+            // Set title from configuration
+            loadConfig.then(config => document.title = config.name)
+
+            // Fetch and mount page parts from configuration
+            loadConfig
+                .then(config => fetch(prefix + config.parts)).then(res => res.json())
+                .then(partRes => {
+                    for (let p in partRes) {
+                        fetch(prefix + partRes[p])
+                            .then(res => res.text())
+                            .then(md => {
+                                let elem = document.querySelector(p);
+                                elem.innerHTML = sd.makeHtml(md)
+                            })
+                    }
+                })
+
+        </script>
+    </body>
+</html>
