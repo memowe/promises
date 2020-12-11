@@ -1,4 +1,6 @@
 import Reveal from 'https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.esm.js'
+import Markdown from 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.esm.js'
+import RevealHighlight from 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/highlight/highlight.esm.js'
 
 // CSS loading helpers
 function loadCSS(css) {
@@ -9,7 +11,11 @@ function loadRevealCSS(rcss) {
 }
 
 // Load stylesheets
-['reset', 'reveal', 'theme/black'].forEach(loadRevealCSS)
+['reset', 'reveal', 'theme/black', '../lib/css/monokai']
+    .forEach(loadRevealCSS)
 
 // Go!
-Reveal.initialize();
+Reveal.initialize({
+    hash: true,
+    plugins: [Markdown, RevealHighlight]
+});

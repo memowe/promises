@@ -10,9 +10,276 @@
         <div class="reveal">
             <div class="slides">
 
-                <section>Slide 1</section>
+                <section data-markdown><textarea data-template>
+                    # Promises
 
-                <section>Slide 2</section>
+                    <p class="fragment">
+                        <strong>Eigentlich:</strong>
+                        Closures, Callbacks, Promises und <code>async</code>/<code>await</code>
+                    </p>
+
+                    **Brown Bag Coding im SCDH**
+
+                    11. Dezember 2020 - Mirko Westermeier
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Vorbereitungen
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    ## Moderner Browser
+                    - Chromium / Chrome
+                    - Firefox
+                    - Edge
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    ## Lokaler Webserver
+                    Nötig, da Browser sonst CORS-Einschränkungen beim Request zu fernen Ressourcen haben.
+                    - **Python**:
+                        `python3 -m http.server`
+                    - **Node**:
+                        `npm install http-server -g` und `http-server`
+                    - **Perl**:
+                        `cpanm -nq App::HTTPThis` und `http_this`
+                    - **PHP**:
+                        `php -S localhost:8000`
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    ## Grundkenntnisse in JavaScript/ECMAScript
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Closures
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Closures
+                    - *Abschluss* einer Funktion
+                    - Kontext der Definition wird mitgespeichert
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Closures
+                    Erinnerung: **Anonyme Funktionen** mit Pfeilnotation
+                    ```js
+                    function add42(x) {
+                        return x + 42
+                    }
+
+                    const add42 = x => x + 42
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Closures
+                    Erinnerung: **Anonyme Funktionen** mit Pfeilnotation
+                    ```js
+                    function add(x,y) {
+                        return x + y
+                    }
+
+                    const add = (x,y) => x + y
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # ~~Currying~~ Schönfinkeln
+                    Wenn eine Funktion mit *n* Argumenten mit einem Argument aufgerufen wird, liefert sie eine Funktion mit den restlichen *n-1* Argumenten zurück.
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    ```js
+                    add = x => y => x + y
+
+                    add(17) // y => 17 + y
+
+                    add(17)(25) // 42
+                    ```
+
+                    ```js
+                    plusSiebzehn = add(17)
+
+                    plusSiebzehn(25) // 42
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Callbacks
+                    Einer zeitaufwendigen, asynchronen Berechnung wird ein Closure übergeben, dessen Code als Resultat der Berechnung ausgeführt wird. Bis es soweit ist, kann "parallel" etwas anderes gemacht werden.
+
+                    Beispiel: Externe Daten laden mit jQuery
+                    ```js
+                    dataStore.prepareFoo()
+
+                    $.getJSON('https://.../foo.json', data => {
+                        dataStore.addFoo(data.foo)
+                    })
+
+                    doSomethingElse()
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Übungsaufgabe
+
+                    JSON-Daten laden und eine Website damit füllen.
+
+                    [mirko.westermeier.de/promises/einkauf.html][einkauf]
+
+                    [einkauf]: https://mirko.westermeier.de/promises/einkauf.html
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Übung: Callback Hell
+
+                    Komplexere JSON-Daten laden und eine Website damit füllen.
+
+                    [mirko.westermeier.de/promises/page-callbacks.html][pc]
+
+                    [pc]: https://mirko.westermeier.de/promises/page-callbacks.html
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Promise
+
+                    Eine Repräsentation eines asynchronen Prozesses, der ausgeführt werden wird.
+
+                    <p class="fragment">Drei mögliche Zustände:</p>
+                    <ul class="fragment">
+                        <li><strong>pending</strong> (schwebend)</li>
+                        <li><strong>fulfilled</strong> (erfolgreich abgeschlossen)</li>
+                        <li><strong>rejected</strong> (Aktion gescheitert)</li>
+                    </ul>
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Promise
+                    ```js
+                    function aktion(resolve, rejected) {
+                        ...
+                    }
+
+                    let p = new Promise(aktion)
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Promise
+                    ```js
+                    function process(result) {
+                        doSomethingWith(result)
+                    }
+
+                    p.then(process)
+
+                    p.catch(error => console.log(error))
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Promise chaining
+                    `.then()` liefert ein Promise zurück:
+                    ```js
+                    let promise1 = doSomething()
+                    let promise2 = promise1.then(yayCallback, nayCallback)
+                    ```
+
+                    ```js
+                    let promise2 = promise1
+                                    .then(yayCallback)
+                                    .catch(nayCallback)
+                    ```
+
+                    ```js
+                    let promise2 = doSomething()
+                                    .then(yayCallback)
+                                    .catch(nayCallback)
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Promise chaining
+                    Wichtig: immer Ergebnisse mit `return` weitergeben!
+                    ```js
+                    generateResult()
+                        .then(result1 => processFurther(result1))
+                        .then(result2 => moreProcessing(result2))
+                        .then(result3 => weDidIt(result3))
+                        .catch(error => console.log(error))
+                    ```
+                    <p class="fragment">Wichtig: die Aktionen können sowohl konkrete Rückgaben haben, als auch Promises!</p>
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Übung: Promise chaining
+
+                    Komplexere JSON-Daten laden und eine Website damit füllen.
+
+                    [mirko.westermeier.de/promises/page-promises.html][pp]
+
+                    [pp]: https://mirko.westermeier.de/promises/page-promises.html
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Komposition
+                    Hintereinanderreihung beliebig vieler Aktionen
+                    ```js
+                    let aktionen = [aktion1, aktion2, aktion3]
+                    
+                    // Promise.resolve() - fulfilled empty Promise
+                    aktionen.reduce((p, a) => p.then(a), Promise.resolve());
+                    ```
+
+                    ```js
+                    aktion1.then(aktion2).then(aktion3)
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # Parallelität
+                    `Promise.all()` erhält ein Array von Promises und liefert ein Array ihrer Ergebnisse, falls alle erfüllt sind
+                    ```js
+                    const p1 = Promise.resolve(3);
+                    const p2 = 42;
+                    const p3 = new Promise((resolve, reject) => {
+                        setTimeout(resolve, 100, 'foo');
+                    });
+
+                    Promise.all([p1, p2, p3]).then((values) => {
+                        console.log(values);
+                    });
+
+                    // Array [3, 42, "foo"]
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    # `async` / `await`
+
+                    Eine `async`-Funktion darf einen `await`-Ausdruck enthalten.
+
+                    `await` wartet auf das Resultat eines Promises:
+
+                    ```js
+                    async function loadAndProcessStuff(URL) {
+                        let data = await fetch(URL).then(res => res.text())
+                        return process(data)
+                    }
+                    ```
+                </textarea></section>
+
+                <section data-markdown><textarea data-template>
+                    ## Übung: `async` / `await`
+
+                    Komplexere JSON-Daten laden und eine Website damit füllen.
+
+                    [mirko.westermeier.de/promises/page-async.html][pa]
+
+                    [pa]: https://mirko.westermeier.de/promises/page-async.html
+                </textarea></section>
 
             </div>
         </div>
